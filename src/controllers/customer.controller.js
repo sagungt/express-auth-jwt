@@ -3,6 +3,12 @@ const { customer: Customer } = db;
 
 const getCustomer = async (req, res) => {
   const { id } = req.params;
+  if (!Number(id)) {
+    return res.status(400).json({
+      message: 'invalid id',
+      data: null,
+    });
+  }
   const customer = await Customer.findOne({
     where: { id },
   });
@@ -34,6 +40,12 @@ const addCustomer = async (req, res) => {
 
 const updateCustomer = async (req, res) => {
   const { id } = req.params;
+  if (!Number(id)) {
+    return res.status(400).json({
+      message: 'invalid id',
+      data: null,
+    });
+  }
   const customer = await Customer.findOne({
     where: { id },
   });
@@ -53,6 +65,12 @@ const updateCustomer = async (req, res) => {
 };
 const deleteCustomer = async (req, res) => {
   const { id } = req.params;
+  if (!Number(id)) {
+    return res.status(400).json({
+      message: 'invalid id',
+      data: null,
+    });
+  }
   const customer = await Customer.findOne({
     where: { id },
   });

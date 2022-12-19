@@ -17,6 +17,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 const db = require('./src/models');
+const { ValidationError } = require('express-validation');
 const { role: Role } = db;
 
 // db.sequelize.sync({ force: true })
@@ -49,5 +50,13 @@ app.get('/', (req, res) => {
 require('./src/routes/auth.routes')(app);
 require('./src/routes/user.routes')(app);
 require('./src/routes/customer.routes')(app);
+
+app.use((err, req, res, next) => {
+  if (err instanceof ValidationError) {
+    return res.status(err.statusCode).json(err)
+  }
+
+  return res.status(500).json(err)
+})
 
 app.listen(port, () => console.log(`🚀 App running on port: ${port}`));

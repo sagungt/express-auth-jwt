@@ -5,6 +5,8 @@ const {
   },
 } = require('../middleware');
 const { signin, signup } = require('../controllers/auth.controller');
+const { validate } = require('express-validation');
+const { registerValidation, loginValidation } = require('../validation');
 
 module.exports = (app) => {
   app.use((req, res, next) => {
@@ -20,9 +22,10 @@ module.exports = (app) => {
     [
       checkDuplicateUsernameOrEmail,
       checkRolesExisted,
+      validate(registerValidation),
     ],
     signup,
   );
 
-  app.post('/api/auth/signin', signin);
+  app.post('/api/auth/signin', validate(loginValidation), signin);
 };
