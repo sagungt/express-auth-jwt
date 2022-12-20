@@ -1,4 +1,7 @@
 const config = require('../config/db.config');
+const userModel = require('../models/users.model');
+const roleModel = require('../models/roles.model');
+const customerModel = require('../models/customers.model');
 
 const Sequelize = require('sequelize');
 const sequelize = new Sequelize(
@@ -22,9 +25,9 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
-db.user = require('../models/users.model')(sequelize, Sequelize);
-db.role = require('../models/roles.model')(sequelize, Sequelize);
-db.customer = require('../models/customers.model')(sequelize, Sequelize);
+db.user = userModel(sequelize, Sequelize);
+db.role = roleModel(sequelize, Sequelize);
+db.customer = customerModel(sequelize, Sequelize);
 
 db.role.belongsToMany(db.user, {
   through: 'user_roles',

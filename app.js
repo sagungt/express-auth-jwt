@@ -1,7 +1,12 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const cors = require('cors');
 require('dotenv').config();
+const { ValidationError } = require('express-validation');
+const bodyParser = require('body-parser');
+const express = require('express');
+const cors = require('cors');
+const db = require('./src/models');
+const authRoute = require('./src/routes/auth.routes');
+const userRoute = require('./src/routes/user.routes');
+const customerRoute = require('./src/routes/customer.routes');
 
 const app = express();
 const port = process.env.PORT || 3001
@@ -16,8 +21,6 @@ app.use(bodyParser.json());
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const db = require('./src/models');
-const { ValidationError } = require('express-validation');
 const { role: Role } = db;
 
 // db.sequelize.sync({ force: true })
@@ -47,9 +50,9 @@ app.get('/', (req, res) => {
   res.json({ message: 'Hello world' });
 });
 
-require('./src/routes/auth.routes')(app);
-require('./src/routes/user.routes')(app);
-require('./src/routes/customer.routes')(app);
+authRoute(app);
+userRoute(app);
+customerRoute(app);
 
 app.use((err, req, res, next) => {
   if (err instanceof ValidationError) {
